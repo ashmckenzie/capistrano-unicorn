@@ -90,7 +90,7 @@ module CapistranoUnicorn
             fi;
 
             echo "Starting Unicorn...";
-            cd #{current_path} && BUNDLE_GEMFILE=#{current_path}/Gemfile bundle exec #{unicorn_bin} -c $UNICORN_CONFIG_PATH -E #{app_env} -D;
+            cd #{current_path} && BUNDLE_GEMFILE=#{current_path}/Gemfile #{bundle_cmd} exec #{unicorn_bin} -c $UNICORN_CONFIG_PATH -E #{app_env} -D;
           RAINBOW
 
           pot_o_gold
@@ -98,8 +98,8 @@ module CapistranoUnicorn
 
         # Set unicorn vars
         #
-        before [ 'unicorn:start', 'unicorn:stop', 'unicorn:shutdown', 
-                 'unicorn:restart', 'unicorn:reload', 'unicorn:add_worker',  
+        before [ 'unicorn:start', 'unicorn:stop', 'unicorn:shutdown',
+                 'unicorn:restart', 'unicorn:reload', 'unicorn:add_worker',
                  'unicorn:remove_worker' ] do
           _cset(:unicorn_pid) { "#{fetch(:current_path)}/tmp/pids/unicorn.pid" }
           _cset(:app_env) { (fetch(:rails_env) rescue 'production') }
